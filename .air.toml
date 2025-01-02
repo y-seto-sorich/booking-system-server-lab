@@ -1,0 +1,14 @@
+# .air.toml
+
+# Air の設定ファイル（Go アプリケーションの自動再起動を制御）
+
+# ビルドするためのコマンド
+[build]
+  bin = "./cmd/app/main"  # 実行ファイルの名前
+  cmd = "go build -o cmd/app/main ."  # ビルドコマンド
+  include_dir = ["cmd", "internal", "pkg"]  # 監視対象のディレクトリ
+
+# 再起動するためのコマンド
+[run]
+  cmd = "./cmd/app/main"  # 実行ファイルのコマンド
+  delay = 1  # ファイル変更後に再ビルドするまでの待機時間（秒）
