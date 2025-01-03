@@ -1,17 +1,22 @@
-# Go 言語の公式イメージを使用
-FROM golang:1.22-alpine
+# Go言語の公式イメージを使用
+FROM golang:1.23-alpine
 
 # 作業ディレクトリの設定
 WORKDIR /app
 
-# Go モジュールのキャッシュを利用
-COPY go.mod go.sum ./
+# Goモジュールのキャッシュを利用
+# go.sumはあとで生成されるはず
+# COPY go.mod go.sum ./
+COPY go.mod ./
 RUN go mod tidy
+
+# airをインストール
+RUN go install github.com/air-verse/air@latest
 
 # ソースコードをコンテナにコピー
 COPY . .
 
-# Go アプリケーションをビルド
+# Goアプリケーションをビルド
 RUN go build -o /app/cmd/app/main ./cmd/app
 
 # コンテナ起動時に実行するコマンド

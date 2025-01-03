@@ -47,3 +47,5 @@ Temporary Items
 ### VisualStudioCode Patch ###
 .history
 .ionide
+
+/tmp/*
