@@ -1,6 +1,7 @@
 package factory
 
 import (
+	"booking-system-server-lab/internal/adapter/controller/dto"
 	"booking-system-server-lab/internal/domain/model"
 
 	"github.com/google/uuid"
@@ -8,7 +9,7 @@ import (
 
 // Userエンティティを生成するファクトリーのインターフェース
 type UserFactory interface {
-	CreateUserWithValidation(name, email string, birthday string) (*model.User, error)
+	CreateUserWithValidation(request dto.CreateUserRequest) (*model.User, error)
 }
 
 // UserFactoryインターフェースを実装する構造体
@@ -20,11 +21,11 @@ func NewUserFactory() UserFactory {
 }
 
 // CreateUserWithValidation implements UserFactory.
-func (u *userFactory) CreateUserWithValidation(name string, email string, birthday string) (*model.User, error) {
+func (u *userFactory) CreateUserWithValidation(request dto.CreateUserRequest) (*model.User, error) {
 
 	// ユーザーIDを生成
 	userID := uuid.New().String()
 
 	// ドメインモデルのインスタンスを生成
-	return model.NewUser(userID, name, email, birthday)
+	return model.NewUser(userID, request)
 }

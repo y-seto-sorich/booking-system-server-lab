@@ -1,6 +1,8 @@
 package handler
 
 import (
+	"booking-system-server-lab/internal/adapter/controller/dto"
+	"booking-system-server-lab/internal/adapter/presenter"
 	"booking-system-server-lab/internal/application/usecase"
 	"net/http"
 
@@ -26,11 +28,23 @@ func NewUserHandler(userUsecase usecase.UserUsecase) UserHandler {
 func (u *userHandler) CreateUser(c echo.Context) error {
 	ctx := c.Request().Context()
 
-	responce, err := u.userUsecase.CreateUser(ctx, "", "", "")
-	if err != nil {
-		return err
+	var request dto.CreateUserRequest
+	if err := c.Bind(&request); err != nil {
+		return echo.NewHTTPError(http.StatusBadRequest, err.Error())
 	}
-	return c.JSON(http.StatusOK, responce)
+
+	if err := c.Validate(request); err != nil {
+		return echo.NewHTTPError(http.StatusBadRequest, err.Error())
+	}
+
+	user, err := u.userUsecase.CreateUser(ctx, request)
+	if err != nil {
+		return c.JSON(http.StatusInternalServerError, map[string]string{"error": err.Error()})
+	}
+
+	response := presenter.ToUserResponse(user)
+
+	return c.JSON(http.StatusOK, response)
 }
 
 // GetUser implements UserHandler.

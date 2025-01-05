@@ -1,4 +1,4 @@
-package service
+package domain
 
 import (
 	"booking-system-server-lab/internal/adapter/gateway"

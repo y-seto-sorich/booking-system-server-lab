@@ -11,7 +11,9 @@ type HandlersDependency struct {
 	UserHandler handler.UserHandler
 }
 
-func SetupRoutes(e *echo.Echo, handlersDependency *HandlersDependency) {
+func SetupRoutes(handlersDependency *HandlersDependency) *echo.Echo {
+
+	e := echo.New()
 	// ミドルウェアの設定
 	e.Use(middleware.Logger())
 
@@ -19,4 +21,6 @@ func SetupRoutes(e *echo.Echo, handlersDependency *HandlersDependency) {
 	e.GET("/users/:id", handlersDependency.UserHandler.GetUser)
 	e.PUT("/users/:id", handlersDependency.UserHandler.UpdateUser)
 	e.DELETE("/users/:id", handlersDependency.UserHandler.DeleteUser)
+
+	return e
 }

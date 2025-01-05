@@ -5,7 +5,7 @@ services:
     volumes:
       - .:/app
     ports:
-      - "3000:8080" # ホスト側のポートを3000番に変更
+      - "3000:8080" # ホスト側で3000番ポートを使用し、コンテナ内で8080番ポートを使用
     environment:
       - GO_ENV=development
     command: ["air"]

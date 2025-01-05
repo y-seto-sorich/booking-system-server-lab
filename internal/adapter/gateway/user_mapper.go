@@ -10,6 +10,6 @@ func ToEntityUser(user *model.User) *entity.User {
 		ID:       user.ID,
 		Name:     user.Name,
 		Email:    user.Email,
-		Birthday: user.Birthday,
+		Birthday: user.BirthDay,
 	}
 }

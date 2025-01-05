@@ -1,11 +1,12 @@
-package service
+package application
 
 import (
+	"booking-system-server-lab/internal/adapter/controller/dto"
 	"booking-system-server-lab/internal/adapter/gateway"
 	"booking-system-server-lab/internal/application/usecase"
 	"booking-system-server-lab/internal/domain/factory"
 	"booking-system-server-lab/internal/domain/model"
-	"booking-system-server-lab/internal/domain/service"
+	domain "booking-system-server-lab/internal/domain/service"
 	"context"
 	"errors"
 )
@@ -13,11 +14,11 @@ import (
 type userService struct {
 	userRepository gateway.UserRepository
 	userFactory    factory.UserFactory
-	domainService  service.UserService
+	domainService  domain.UserService
 }
 
 // UserUsecaseのインスタンスを作成するコンストラクタ
-func NewUserService(userRepository gateway.UserRepository, userFactory factory.UserFactory, domainService service.UserService) usecase.UserUsecase {
+func NewUserService(userRepository gateway.UserRepository, userFactory factory.UserFactory, domainService domain.UserService) usecase.UserUsecase {
 	return &userService{
 		userRepository: userRepository,
 		userFactory:    userFactory,
@@ -25,9 +26,9 @@ func NewUserService(userRepository gateway.UserRepository, userFactory factory.U
 	}
 }
 
-func (s *userService) CreateUser(ctx context.Context, name string, email string, birthday string) (*model.User, error) {
+func (s *userService) CreateUser(ctx context.Context, request dto.CreateUserRequest) (*model.User, error) {
 	// メールアドレスが既に登録されているかチェック
-	exists, err := s.domainService.Exists(email)
+	exists, err := s.domainService.Exists(request.Email)
 	if err != nil {
 		return nil, err
 	}
@@ -37,7 +38,7 @@ func (s *userService) CreateUser(ctx context.Context, name string, email string,
 	}
 
 	// ファクトリーを使ってユーザーを作成
-	user, err := s.userFactory.CreateUserWithValidation(name, email, birthday)
+	user, err := s.userFactory.CreateUserWithValidation(request)
 	if err != nil {
 		return nil, err
 	}
@@ -51,7 +52,7 @@ func (s *userService) CreateUser(ctx context.Context, name string, email string,
 		return nil, err
 	}
 
-	// 作成したドメインモデル(model.User)を戻り値として返す
+	// ドメインモデル(model.User)を戻り値として返す
 	return user, nil
 }
 

@@ -1,6 +1,7 @@
 package model
 
 import (
+	"booking-system-server-lab/internal/adapter/controller/dto"
 	"errors"
 	"time"
 )
@@ -9,11 +10,11 @@ type User struct {
 	ID       string
 	Name     string
 	Email    string
-	Birthday time.Time
+	BirthDay time.Time
 }
 
-func NewUser(id string, name string, email string, birthday string) (*User, error) {
-	if name == "" || email == "" {
+func NewUser(id string, request dto.CreateUserRequest) (*User, error) {
+	if request.Name == "" || request.Email == "" {
 		return nil, errors.New("name and email are required")
 	}
 
@@ -21,16 +22,16 @@ func NewUser(id string, name string, email string, birthday string) (*User, erro
 	// 	return nil, errors.New("invalid email format")
 	// }
 
-	birthdayTime, err := time.Parse("2006-01-02", birthday)
+	birthdayTime, err := time.Parse("2006-01-02", request.BirthDay)
 	if err != nil {
 		return nil, errors.New("invalid date format for birthday")
 	}
 
 	return &User{
 		ID:       id,
-		Name:     name,
-		Email:    email,
-		Birthday: birthdayTime,
+		Name:     request.Name,
+		Email:    request.Email,
+		BirthDay: birthdayTime,
 	}, nil
 }
 
