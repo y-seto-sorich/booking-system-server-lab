@@ -5,9 +5,7 @@ FROM golang:1.23-alpine
 WORKDIR /app
 
 # Goモジュールのキャッシュを利用
-# go.sumはあとで生成されるはず
-# COPY go.mod go.sum ./
-COPY go.mod ./
+COPY go.mod go.sum ./
 RUN go mod tidy
 
 # airをインストール
